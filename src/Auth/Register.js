@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button} from 'react-native';
 import axios from 'axios';
 import storeToken from './DeviceStorage';
+import SubmitButton from '../Components/SubmitButton';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -42,7 +43,7 @@ const Register = () => {
                 value={password}
                 onChangeText={setPassword}
             />
-            <Button title="Register" onPress={handleSubmit} />
+            <SubmitButton title="Confirm Registration" onPress={handleSubmit} />
             {error && <Text>{error}</Text>}
         </View>
     );

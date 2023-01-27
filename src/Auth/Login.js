@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button} from 'react-native';
-import axios from 'axios';
-import storeToken from './DeviceStorage';
+import { View, Text, TextInput} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import SubmitButton from '../Components/SubmitButton';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -11,14 +10,14 @@ const Login = () => {
 
     const navigation = useNavigation();
 
-    const handleSubmit = async () => {
+    const handleLogin = async () => {
         try {
             /*const response = await axios.post('http://localhost:3001/auth/login', {
                 username,
                 password,
             });
             console.log(response)*/
-            navigation.navigate('Register', { username });
+            navigation.navigate('Home');
             /*if(response.data.token){
                 
                 storeToken(response.data.token);
@@ -33,6 +32,10 @@ const Login = () => {
         }
     };
 
+    const navigateToRegister = () => {
+        navigation.navigate('Register');
+    }
+
     return (
         <View>
             <TextInput
@@ -46,7 +49,8 @@ const Login = () => {
                 value={password}
                 onChangeText={setPassword}
             />
-            <Button title="Login" onPress={handleSubmit} />
+            <SubmitButton title="Login" onPress={handleLogin} />
+            <SubmitButton title="Register" onPress={navigateToRegister} />
             {error && <Text>{error}</Text>}
         </View>
     );

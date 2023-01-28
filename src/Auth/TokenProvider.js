@@ -20,7 +20,7 @@ export const getToken = async () => {
     }
   }
 
-export const deleteToken = async () => {
+export const removeToken = async () => {
     try {
         await AsyncStorage.removeItem(TOKEN_KEY);
     } catch (error) {

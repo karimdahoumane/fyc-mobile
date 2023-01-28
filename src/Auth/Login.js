@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from '../Utils/Constants';
-import { getToken } from './TokenProvider';
+import { storeToken, getToken } from './TokenProvider';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -17,7 +17,6 @@ const Login = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + await getToken(),
                 },
                 body: JSON.stringify({
                     username,
@@ -25,10 +24,12 @@ const Login = () => {
                 }),
             });
             const json = await response.json();
-            if (json.error) {
-                setError(json.error);
-            } else {
+            if (json.access_token) {
+                console.log(json.access_token);
+                storeToken(json.access_token);
                 navigation.navigate('Home');
+            } else {
+                setError(json.message);
             }
         } catch (error) {
             console.error(error);
@@ -58,10 +59,12 @@ const Login = () => {
                     onChangeText={(password) => setPassword(password)}
                 />
             </View>
+            {error && 
+                    <Text style={styles.errorText}>{error}</Text>
+            }
             <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-                <Text style={styles.loginText}>LOGIN</Text> 
+                <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
-            {error && <Text>{error}</Text>}
         </View>
     );
 
@@ -96,6 +99,9 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         marginTop:40,
         backgroundColor:"#FF1493",
+    },
+    errorText: {
+        color: 'red',
     },
 });
 

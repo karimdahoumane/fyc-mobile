@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import SubmitButton from '../Components/SubmitButton';
+import { API_URL } from '../Utils/Constants';
+import { getToken } from './TokenProvider';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -12,23 +13,25 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            /*const response = await axios.post('http://localhost:3001/auth/login', {
-                username,
-                password,
+            const response = await fetch(API_URL+'auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getToken(),
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
             });
-            console.log(response)*/
-            navigation.navigate('Home');
-            /*if(response.data.token){
-                
-                storeToken(response.data.token);
-                return true;
-                // store the token in AsyncStorage or in a Redux store
-                // redirect to the home page or another protected page
-            }else{
-                setError(response.data.error)
-            }*/
-        } catch (err) {
-            setError('An error occurred. Please try again.');
+            const json = await response.json();
+            if (json.error) {
+                setError(json.error);
+            } else {
+                navigation.navigate('Home');
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -37,23 +40,63 @@ const Login = () => {
     }
 
     return (
-        <View>
-            <TextInput
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                placeholder="Password"
-                secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
-            />
-            <SubmitButton title="Login" onPress={handleLogin} />
-            <SubmitButton title="Register" onPress={navigateToRegister} />
+        <View style={styles.container}>
+            <StatusBar style="auto" />
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.TextInput}
+                    placeholder="Username"
+                    placeholderTextColor="#003f5c"
+                    onChangeText={(username) => setUsername(username)}
+                />
+            </View>
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.TextInput}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword(password)}
+                />
+            </View>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                <Text style={styles.loginText}>LOGIN</Text> 
+            </TouchableOpacity>
             {error && <Text>{error}</Text>}
         </View>
     );
+
+    
 };
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    inputView: {
+        backgroundColor: "#FFC0CB",
+        borderRadius: 30,
+        width: "70%",
+        height: 45,
+        marginBottom: 20,
+        alignItems: "center",
+    },
+    TextInput: {
+        height: 50,
+        flex: 1,
+        padding: 10,
+        marginLeft: 20,
+    },
+    loginBtn: {
+        width:"80%",
+        borderRadius:25,
+        height:50,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:40,
+        backgroundColor:"#FF1493",
+    },
+});
 
 export default Login;

@@ -6,7 +6,7 @@ import { getToken } from "../Auth/TokenProvider";
 import { View } from "react-native-web";
 import { Text, StyleSheet } from "react-native";
 
-const ChannelsList = () => {
+const ChannelsList = ({navigation}) => {
   const [channels, setChannels] = useState([]);
   const [error, setError] = useState("");
 
@@ -39,8 +39,8 @@ const ChannelsList = () => {
     <View>
         <FlatList
             data={channels}
-            renderItem={({ item }) => <ChannelItem channel={item} />}
-            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ChannelItem channel={item} navigation={navigation}/>}
+            keyExtractor={(item) => item.id}
         />
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>

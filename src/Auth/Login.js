@@ -7,49 +7,14 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "../Utils/Constants";
-import { storeToken, getToken } from "./TokenProvider";
+import { AuthContext } from "../Utils/Constants";
 
-const Login = () => {
+const Login = ({navigation}) => {
+  const { login } = React.useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const navigation = useNavigation();
-
-  const handleLogin = async () => {
-    try {
-      const response = await fetch(API_URL + "auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
-      });
-      if (!response.ok) {
-        setError("Invalid username or password");
-        return;
-      }
-      const json = await response.json();
-      if (json.access_token) {
-        storeToken(json.access_token);
-        navigation.navigate("Home");
-        setError("");
-      } else {
-        setError("Invalid username or password");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const navigateToRegister = () => {
-    navigation.navigate("Register");
-  };
 
   return (
     <View style={styles.container}>
@@ -74,10 +39,10 @@ const Login = () => {
         />
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => login(username, password, setError, API_URL)}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.registerBtn} onPress={navigateToRegister}>
+      <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('Register')}>
         <Text style={styles.registerText}>REGISTER</Text>
       </TouchableOpacity>
     </View>

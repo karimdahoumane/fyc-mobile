@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
-import Logout from "../Auth/Logout";
 import ChannelsList from "../Components/ChannelsList";
 import { StyleSheet } from "react-native";
-import MenuOptions from "../Components/MenuOptions";
 
-const Home = ({ navigation }) => {
-
+const HomeScreen = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,7 +11,6 @@ const Home = ({ navigation }) => {
   }, []);
 
   return (
-    
     <View style={{ flex: 1, padding: 24 }}>
       {isLoading ? (
         <ActivityIndicator />
@@ -32,4 +28,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default HomeScreen;

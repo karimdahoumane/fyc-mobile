@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { removeToken } from './TokenProvider';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { AuthContext } from '../Utils/Constants';
 
 const Logout = ({ navigation }) => {
-    const handleLogout = async () => {
-        await removeToken();
-        navigation.navigate('Login');
-    };
+    const { logout } = React.useContext(AuthContext);
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+            <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
                 <Icon name="logout" type="antdesign" color="#fff" />
             </TouchableOpacity>
         </View>

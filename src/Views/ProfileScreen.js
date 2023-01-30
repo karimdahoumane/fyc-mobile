@@ -1,31 +1,26 @@
 import React from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { SafeAreaView, StyleSheet, Text } from "react-native";
 import ProfileItem from "../Components/ProfileItem";
-import { useEffect, useState } from "react";
 
 const ProfileScreen = () => {
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
   return (
-    <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <ProfileItem style={Styles.profileItem} />
-      )}
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Mon profil</Text>
+      <ProfileItem style={styles.profileItem} />
+    </SafeAreaView>
   );
 };
 
-const Styles = StyleSheet.create({
-    profileItem: {
-        flex: 1,
-    },
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  profileItem: {
+    marginTop: 20,
+  },
 });
 
 export default ProfileScreen;
-

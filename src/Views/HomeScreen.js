@@ -1,30 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
+import React from "react";
+import { SafeAreaView, StyleSheet, Text } from "react-native";
 import ChannelsList from "../Components/ChannelsList";
-import { StyleSheet } from "react-native";
 
-const HomeScreen = () => {
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
+const HomeScreen = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <ChannelsList style={Styles.channelList}/>
-      )}
-      
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.welcomeTitle}>Bonjour !</Text>
+      <ChannelsList navigation={navigation} style={styles.channelList} />
+    </SafeAreaView>
   );
 };
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    justifyContent: "center",
+  },
+  welcomeTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 20,
+  },
   channelList: {
-    flex: 1,
+    marginTop: 20,
   },
 });
 

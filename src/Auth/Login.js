@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from "react-native";
 import { API_URL } from "../Utils/Constants";
-import { AuthContext } from "../Utils/Constants";
+import { AuthContext } from "./AuthContext";
 
 const Login = ({navigation}) => {
   const { login } = React.useContext(AuthContext);
@@ -39,7 +39,7 @@ const Login = ({navigation}) => {
         />
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
-      <TouchableOpacity style={styles.loginBtn} onPress={() => login(username, password, setError, API_URL)}>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => login(username, password, API_URL)}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('Register')}>

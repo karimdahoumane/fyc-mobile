@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import ProfileItem from "../Components/ProfileItem";
 
-const ProfileScreen = () => {
+const Profile = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Mon profil</Text>
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default Profile;

@@ -9,9 +9,9 @@ const ChannelItem = ({ channelData }, { navigation }) => {
   const [channel, setChannel] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const navigateToChannel = (channel) => async () => {
+  const navigateToChannel = (channelData) => async () => {
     try {
-      const response = await fetch(API_URL + "channels/" + channel.id, {
+      const response = await fetch(API_URL + "channels/" + channelData.id, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const ChannelItem = ({ channelData }, { navigation }) => {
       const json = await response.json();
 
       setChannel(json);
-      navigation.navigate("ChannelScreen", { channel: json });
+      navigation.navigate("Channel", { screen: "Channel", params: { id: channelData.id, name: channelData.name } });
     } catch (error) {
       console.error(error);
       setError(VIEW_ERROR);

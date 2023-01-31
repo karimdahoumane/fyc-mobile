@@ -5,13 +5,12 @@ import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
 
-const ChannelScreen = (route, navigation) => {
-  const { channel } = route.params;
-  console.log(channel);
+const Channel = ({ channelData }) => {
+  const { channelId, channelName } = channelData;
   return (
     <View style={styles.channelItem}>
       <TouchableOpacity>
-        <Text style={styles.channelName}>{JSON.stringify(channel.name)}</Text>
+        <Text style={styles.channelName}>{JSON.stringify(channelName)}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChannelScreen;
+export default Channel;

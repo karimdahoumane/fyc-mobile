@@ -5,7 +5,6 @@ import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
 import { Text, StyleSheet } from "react-native";
 import { View } from "react-native";
-import ChannelScreen from "../Views/ChannelScreen";
 
 const ChannelsList = ({ navigation }) => {
   const [channels, setChannels] = useState([]);
@@ -30,13 +29,14 @@ const ChannelsList = ({ navigation }) => {
       }
       const json = await response.json();
       setChannels(json);
+      console.log(json);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={channels}
         renderItem={({ item }) => (
@@ -44,13 +44,17 @@ const ChannelsList = ({ navigation }) => {
         )}
         keyExtractor={(item) => item.id}
       />
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text style={styles.errorMessage}>{error}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  errorText: {
+  container: {
+    flex: 1,
+    backgroundColor: "#000000",
+  },
+  errorMessage: {
     color: "red",
     fontSize: 20,
     textAlign: "center",

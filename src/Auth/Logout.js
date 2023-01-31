@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { AuthContext } from '../Utils/Constants';
+import { AuthContext } from './AuthContext';
 
-const Logout = ({ navigation }) => {
+const Logout = () => {
     const { logout } = React.useContext(AuthContext);
 
     return (

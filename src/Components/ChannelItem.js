@@ -4,12 +4,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
+import { Icon } from "react-native-elements";
 
-const ChannelItem = ({ channelData }, { navigation }) => {
+const ChannelItem = ({ channelData, navigation }) => {
   const [channel, setChannel] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const navigateToChannel = (channelData) => async () => {
+  const navigateToChannel = (channelData, navigation) => async () => {
     try {
       const response = await fetch(API_URL + "channels/" + channelData.id, {
         method: "GET",
@@ -23,9 +24,11 @@ const ChannelItem = ({ channelData }, { navigation }) => {
       }
 
       const json = await response.json();
-
       setChannel(json);
-      navigation.navigate("Channel", { screen: "Channel", params: { id: channelData.id, name: channelData.name } });
+      navigation.navigate("Channel", {
+        channelId: channelData.id,
+        channelName: channelData.name,
+      });
     } catch (error) {
       console.error(error);
       setError(VIEW_ERROR);
@@ -35,10 +38,11 @@ const ChannelItem = ({ channelData }, { navigation }) => {
   return (
     <TouchableOpacity
       style={styles.channelItem}
-      onPress={navigateToChannel(channelData)}
+      onPress={navigateToChannel(channelData, navigation)}
     >
       <Text style={styles.channelName}>{channelData.id}</Text>
       <Text style={styles.channelName}>{channelData.name}</Text>
+      <Icon name="delete" size={30} color="#900" />
       {error && <Text style={styles.errorMessage}>{error}</Text>}
     </TouchableOpacity>
   );

@@ -9,9 +9,9 @@ import Logout from "./src/Auth/Logout";
 import Register from "./src/Auth/Register";
 import Home from "./src/Screens/Home";
 import Profile from "./src/Screens/Profile";
+import Channel from "./src/Screens/Channel";
 import Splash from "./src/Screens/Splash";
-import { Button } from "react-native";
-import { getToken, removeToken, storeToken } from "./src/Auth/TokenProvider";
+import { removeToken, storeToken } from "./src/Auth/TokenProvider";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -39,6 +39,7 @@ const HomeStackScreen = () => (
   headerRight: () => (
     <Logout />
   ) }}/>
+    <ChannelStack.Screen name="Channel" component={Channel} />
   </HomeStack.Navigator>
 );
 
@@ -47,6 +48,13 @@ const ProfileStackScreen = () => (
   <ProfileStack.Navigator>
     <ProfileStack.Screen name="Profile" component={Profile} />
   </ProfileStack.Navigator>
+);
+
+const ChannelStack = createStackNavigator();
+const ChannelStackScreen = () => (
+  <ChannelStack.Navigator>
+    <ChannelStack.Screen name="Channel" component={Channel} />
+  </ChannelStack.Navigator>
 );
 
 const TabsScreen = () => (

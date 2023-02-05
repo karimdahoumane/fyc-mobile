@@ -3,7 +3,7 @@ import { getToken } from "../Auth/TokenProvider";
 
 export const getCurrentUser = async () => {
     try {
-        const response = fetch(API_URL + "users/me", {
+        const response = fetch(API_URL + "users/13", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

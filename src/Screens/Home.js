@@ -29,7 +29,13 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     getChannels();
-  }, []);
+  }, [navigation]);
+
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      getChannels();
+    });
+  },[navigation, channels]);
 
   const getChannels = async () => {
     try {

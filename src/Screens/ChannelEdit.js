@@ -30,8 +30,7 @@ const ChannelEdit = ({ route, navigation }) => {
         return;
       }
       setChannelName("");
-      navigation.navigate("Home");
-      flatListRef.current.scrollToEnd({ animated: true });
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }

@@ -11,6 +11,8 @@ import Home from "./src/Screens/Home";
 import Profile from "./src/Screens/Profile";
 import Channel from "./src/Screens/Channel";
 import Splash from "./src/Screens/Splash";
+import ChannelAdd from "./src/Screens/ChannelAdd";
+import ChannelEdit from "./src/Screens/ChannelEdit";
 import { removeToken, storeToken } from "./src/Auth/TokenProvider";
 
 const AuthStack = createStackNavigator();
@@ -32,14 +34,18 @@ const AuthStackScreen = () => (
 const Tabs = createBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
+const ChannelAddStack = createStackNavigator();
+const ChannelEditStack = createStackNavigator();
 const HomeStackScreen = () => (
-  <HomeStack.Navigator >
+  <HomeStack.Navigator>
     <HomeStack.Screen name="Home" component={Home} options={{ title: "Home",
   
   headerRight: () => (
     <Logout />
   ) }}/>
     <ChannelStack.Screen name="Channel" component={Channel} />
+    <ChannelAddStack.Screen name="ChannelAdd" component={ChannelAdd} />
+    <ChannelEditStack.Screen name="ChannelEdit" component={ChannelEdit} />
   </HomeStack.Navigator>
 );
 

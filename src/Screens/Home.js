@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, Button } from "react-native";
 import { ScreenContainer } from "react-native-screens";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { View } from "react-native";
@@ -66,7 +66,7 @@ const Home = ({ navigation }) => {
 
       const json = await response.json();
       setChannel(json);
-      console.log(json)
+      console.log(json);
       navigation.navigate("Channel", {
         channelId: channel.id,
         channelName: channel.name,
@@ -77,9 +77,8 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const openEditModal = (channel) => {
-    setChannelToEdit(channel);
-    setModalVisible(true);
+  const editChannel = (channel) => {
+    navigation.navigate("ChannelEdit",{channel})
   };
 
   const deleteChannel = async (channel) => {
@@ -107,6 +106,7 @@ const Home = ({ navigation }) => {
       <View style={styles.welcomeTitle}>
         <Text style={styles.titleText}>Welcome to the chat app!</Text>
       </View>
+
       <View style={styles.channelsList}>
         <FlatList
           data={channels}
@@ -116,15 +116,10 @@ const Home = ({ navigation }) => {
                 <Text>{item.name}</Text>
               </TouchableOpacity>
               <View style={styles.rightActionsContainer}>
-                <TouchableOpacity
-
-                  onPress={() => openEditModal(item)}
-                >
+                <TouchableOpacity onPress={() => editChannel(item)}>
                   <Text style={styles.rightActionButton}>Edit</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => deleteChannel(item)}
-                >
+                <TouchableOpacity onPress={() => deleteChannel(item)}>
                   <Text style={styles.rightActionButton}>Delete</Text>
                 </TouchableOpacity>
               </View>
@@ -133,8 +128,14 @@ const Home = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       </View>
+      <View style={styles.addChannelButton}>
+        <Button
+          style={styles.messageButton}
+          title="Ajouter un channel"
+          onPress={() => navigation.navigate("ChannelAdd")}
+        />
+      </View>
     </View>
-
   );
 };
 

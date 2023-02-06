@@ -43,7 +43,8 @@ const Channel = ({ route, navigation }) => {
 
   const postMessage = async () => {
     try {
-      const userId = await getCurrentUser();
+      const user = await getCurrentUser();
+      console.log(user)
       const response = await fetch(API_URL + "messages", {
         method: "POST",
         headers: {
@@ -53,7 +54,7 @@ const Channel = ({ route, navigation }) => {
         body: JSON.stringify({
           message: message,
           channelId: channelId,
-          sendUserId: userId,
+          senderId: user.sub,
         }),
       });
       if (!response.ok) {
@@ -86,14 +87,14 @@ const Channel = ({ route, navigation }) => {
             index,
           })}
           data={messages}
-          initialScrollIndex={messages.length - 1}
           renderItem={({ item }) => (
             <View style={styles.messageItem}>
               <Text style={styles.textMessage}>
                 {item.senderUser.nickname} {item.message}
               </Text>
             </View>
-          )}
+          )
+        }
           keyExtractor={(item) => item.id}
         />
       </View>

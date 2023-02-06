@@ -4,6 +4,5 @@ import jwt_decode from 'jwt-decode';
 export const getCurrentUser = async () => {
     const token = await getToken();
     const user = await jwt_decode(token);
-    console.log(user);
     return user;
 }

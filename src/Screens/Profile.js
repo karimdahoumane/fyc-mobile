@@ -27,7 +27,6 @@ const Profile = () => {
           },
         });
         const json = await response.json();
-        console.log(json)
         setEmail(json.email);
         setNickname(json.nickname);
       } catch (error) {
@@ -53,6 +52,7 @@ const Profile = () => {
       <TextInput style={styles.textInput}
         onChangeText={setNickname}
         value={nickname}
+        disabled
       />
       <Text style={{ color: "red" }}>{error}</Text>
       </View>
@@ -89,11 +89,12 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     width: 300,
-    borderColor: "gray",
+    borderColor: "#111111",
+    backgroundColor: "#eeeeee",
     borderWidth: 1,
     marginBottom: 20,
   },
-  
+
   
 });
 

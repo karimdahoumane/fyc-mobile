@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const SplashScreen = () => {
+const Splash = () => {
   return (
     <View>
       <Text>Loading...</Text>
@@ -9,4 +9,4 @@ const SplashScreen = () => {
   );
 }
 
-export default SplashScreen;
+export default Splash;

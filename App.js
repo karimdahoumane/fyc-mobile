@@ -1,108 +1,103 @@
+
 import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { getToken, storeToken, removeToken } from "./src/Auth/TokenProvider";
-import Login from "./src/Auth/Login";
-import Register from "./src/Auth/Register";
-import HomeScreen from "./src/Views/HomeScreen";
-import ProfileScreen from "./src/Views/ProfileScreen";
-import SplashScreen from "./src/Views/SplashScreen";
-import { AuthContext } from "./src/Utils/Constants";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AuthContext } from "./src/Auth/AuthContext";
+import Login from "./src/Auth/Login";
+import Logout from "./src/Auth/Logout";
+import Register from "./src/Auth/Register";
+import Home from "./src/Screens/Home";
+import Profile from "./src/Screens/Profile";
+import Channel from "./src/Screens/Channel";
+import Splash from "./src/Screens/Splash";
+import ChannelAdd from "./src/Screens/ChannelAdd";
+import ChannelEdit from "./src/Screens/ChannelEdit";
+import { removeToken, storeToken } from "./src/Auth/TokenProvider";
 
-const MyTheme = {
-  dark: false,
-  colors: {
-    primary: "rgb(255, 45, 85)",
-    background: "rgb(242, 242, 242)",
-    card: "rgb(255, 255, 255)",
-    text: "rgb(28, 28, 30)",
-    border: "rgb(199, 199, 204)",
-    notification: "rgb(255, 69, 58)",
-  },
-};
+const AuthStack = createStackNavigator();
+const AuthStackScreen = () => (
+  <AuthStack.Navigator>
+    <AuthStack.Screen
+      name="Login"
+      component={Login}
+      options={{ title: "Sign In" }}
+    />
+    <AuthStack.Screen
+      name="Register"
+      component={Register}
+      options={{ title: "Create Account" }}
+    />
+  </AuthStack.Navigator>
+);
 
-const Tab = createBottomTabNavigator();
+const Tabs = createBottomTabNavigator();
 
-const HomeTab = () => {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-};
+const HomeStack = createStackNavigator();
+const ChannelAddStack = createStackNavigator();
+const ChannelEditStack = createStackNavigator();
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="Home" component={Home} options={{ title: "Home",
+  
+  headerRight: () => (
+    <Logout />
+  ) }}/>
+    <ChannelStack.Screen name="Channel" component={Channel} />
+    <ChannelAddStack.Screen name="ChannelAdd" component={ChannelAdd} />
+    <ChannelEditStack.Screen name="ChannelEdit" component={ChannelEdit} />
+  </HomeStack.Navigator>
+);
 
-const AppStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Home" headerMode="none">
-      <Stack.Screen name="Home" component={HomeTab} />
-    </Stack.Navigator>
-  );
-};
+const ProfileStack = createStackNavigator();
+const ProfileStackScreen = () => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name="Profile" component={Profile} />
+  </ProfileStack.Navigator>
+);
 
-const AuthStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Login" headerMode="none">
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-    </Stack.Navigator>
-  );
-};
+const ChannelStack = createStackNavigator();
+const ChannelStackScreen = () => (
+  <ChannelStack.Navigator>
+    <ChannelStack.Screen name="Channel" component={Channel} />
+  </ChannelStack.Navigator>
+);
 
-const Stack = createStackNavigator();
+const TabsScreen = () => (
+  <Tabs.Navigator>
+    <Tabs.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }} />
+    <Tabs.Screen name="Profile" component={ProfileStackScreen} options={{ headerShown: false }} />
+  </Tabs.Navigator>
+);
 
-const App = ({ navigation }) => {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case "RESTORE_TOKEN":
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case "SIGN_IN":
-          if (action.token) {
-            storeToken(action.token);
-          }
-          return {
-            ...prevState,
-            isLogout: false,
-            userToken: action.token,
-          };
-        case "SIGN_OUT":
-          removeToken();
-          return {
-            ...prevState,
-            isLogout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isLogout: false,
-      userToken: null,
-    }
-  );
+const RootStack = createStackNavigator();
+const RootStackScreen = ({ userToken }) => (
+  <RootStack.Navigator headerMode="none">
+    {userToken ? (
+      <RootStack.Screen
+        name="App"
+        component={TabsScreen}
+      />    
+    ) : (
+      <RootStack.Screen
+        name="Auth"
+        component={AuthStackScreen}
+        options={{
+          animationEnabled: false
+        }}
+      />
+    )}
+  </RootStack.Navigator>
+);
 
-  React.useEffect(() => {
-    const bootstrapAsync = async () => {
-      try {
-        await getToken();
-      } catch (e) {
-        console.log(e);
-      }
-
-      dispatch({ type: "RESTORE_TOKEN", token: state.userToken });
-    };
-    bootstrapAsync();
-  }, []);
+const App = () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+  const [error, setError] = React.useState(null);
 
   const authContext = React.useMemo(
     () => ({
-      login: async (username, password, setError, API_URL) => {
+      login: async (username, password, API_URL) => {
         try {
           const response = await fetch(API_URL + "auth/login", {
             method: "POST",
@@ -120,51 +115,42 @@ const App = ({ navigation }) => {
           } else {
             const json = await response.json();
             if (json.access_token) {
-              dispatch({ type: "SIGN_IN", token: json.access_token });
-              setError("");
+              await storeToken(json.access_token)
+              setUserToken(json.access_token);
+              setIsLoading(false);
             }
           }
         } catch (error) {
           console.error(error);
         }
       },
-      logout: () => dispatch({ type: "SIGN_OUT" }),
+      logout: () => {
+        setIsLoading(false);
+        setUserToken(null);
+        removeToken();
+      },
     }),
     []
   );
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, [userToken]);
+
+  if (isLoading) {
+    return <Splash />;
+  }
+
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
-              name="Auth"
-              component={AuthStack}
-              options={{
-                title: "Authentication",
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isLogout ? "pop" : "push",
-              }}
-            />
-          ) : (
-            <Stack.Screen
-              name="HomeScreen"
-              component={AppStack}
-              options={{
-                title: "Home",
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isLogout ? "pop" : "push",
-              }}
-            />
-          )}
-        </Stack.Navigator>
+      <NavigationContainer>
+        <RootStackScreen userToken={userToken} />
       </NavigationContainer>
     </AuthContext.Provider>
+
   );
 };
+
 export default App;

@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, Button } from "react-native";
-import { ScreenContainer } from "react-native-screens";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { View } from "react-native";
 import { useState } from "react";
@@ -119,7 +118,7 @@ const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             <View style={styles.channelItem}>
               <TouchableOpacity onPress={navigateToChannel(item, navigation)}>
-                <Text>{item.name}</Text>
+                <Text style={styles.channelTitleText}>{item.name}</Text>
               </TouchableOpacity>
               <View style={styles.rightActionsContainer}>
                 <TouchableOpacity onPress={() => editChannel(item)}>
@@ -134,13 +133,14 @@ const Home = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       </View>
-      <View style={styles.addChannelButton}>
-        <Button
-          style={styles.messageButton}
-          title="Ajouter un channel"
-          onPress={() => navigation.navigate("ChannelAdd")}
-        />
-      </View>
+      <Icon
+        style={styles.addChannelButton}
+        name="circle-with-plus"
+        type="entypo"
+        color="#0084ff"
+        size={50}
+        onPress={() => navigation.navigate("ChannelAdd")}
+      />
     </View>
   );
 };
@@ -148,9 +148,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#000000",
   },
   welcomeTitle: {
     flex: 1,
@@ -160,6 +158,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "white",
   },
   channelsList: {
     flex: 4,
@@ -174,6 +173,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey",
   },
+  channelTitleText: {
+    fontSize: 18,
+    color: "white",
+  },
   rightActionsContainer: {
     flexDirection: "row",
   },
@@ -183,6 +186,11 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderRadius: 5,
+  },
+  addChannelButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
   },
 });
 

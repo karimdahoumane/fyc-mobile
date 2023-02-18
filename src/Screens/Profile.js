@@ -63,7 +63,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 30,
     fontWeight: "bold",
+    color: "#ffffff",
   },
   editItem: {
     flex: 3,
@@ -85,12 +86,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#ffffff",
   },
   textInput: {
     height: 40,
     width: 300,
     borderColor: "#111111",
-    backgroundColor: "#eeeeee",
+    backgroundColor: "#c2e0f4",
     borderWidth: 1,
     marginBottom: 20,
   },

@@ -81,6 +81,13 @@ const Channel = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.channelTitle}>
+          <Icon
+            style={styles.goBackButton}
+            name="arrow-back"
+            type="material"
+            color="#ffffff"
+            onPress={() => navigation.goBack()}
+          />
           <Text style={styles.channelName}>
             {channelName}
           </Text>
@@ -137,6 +144,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
+    display: "flex",
+    flexDirection: "row",
+    margin: 10,
+  },
+  goBackButton: {
+    flex: 1,
+    margin : 10,
   },
   channelName: {
     color: "#ffffff",

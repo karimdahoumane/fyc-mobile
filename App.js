@@ -36,8 +36,9 @@ const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ChannelAddStack = createStackNavigator();
 const ChannelEditStack = createStackNavigator();
+const ChannelStack = createStackNavigator();
 const HomeStackScreen = () => (
-  <HomeStack.Navigator>
+  <HomeStack.Navigator headerMode="none">
     <HomeStack.Screen name="Home" component={Home} options={{ title: "Home",
   
   headerRight: () => (
@@ -51,17 +52,11 @@ const HomeStackScreen = () => (
 
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen = () => (
-  <ProfileStack.Navigator>
+  <ProfileStack.Navigator headerMode="none">
     <ProfileStack.Screen name="Profile" component={Profile} />
   </ProfileStack.Navigator>
 );
 
-const ChannelStack = createStackNavigator();
-const ChannelStackScreen = () => (
-  <ChannelStack.Navigator>
-    <ChannelStack.Screen name="Channel" component={Channel} />
-  </ChannelStack.Navigator>
-);
 
 const TabsScreen = () => (
   <Tabs.Navigator>

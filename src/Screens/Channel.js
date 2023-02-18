@@ -17,9 +17,12 @@ const Channel = ({ route, navigation }) => {
   const flatListRef = useRef();
   const [currentUser, setCurrentUser] = useState();
 
-  useEffect(async () => {
+  useEffect(() => {
     getMessagesFromChannel();
-    getLoggedInUser();
+    async function fetchData() {
+      await getLoggedInUser();
+    }
+    fetchData();
   }, []);
 
   const getLoggedInUser = async () => {

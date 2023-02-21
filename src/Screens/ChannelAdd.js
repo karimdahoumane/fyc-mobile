@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Button } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Icon, Text } from "react-native-elements";
 
 const ChannelAdd = ({ navigation }) => {
-  const [text, setText] = useState("");
   const [channelName, setChannelName] = useState("");
   const [error, setError] = useState("");
 

@@ -17,7 +17,11 @@ import { removeToken, storeToken } from "./src/Auth/TokenProvider";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
-  <AuthStack.Navigator>
+  <AuthStack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}
+  >
     <AuthStack.Screen
       name="Login"
       component={Login}
@@ -38,12 +42,12 @@ const ChannelAddStack = createStackNavigator();
 const ChannelEditStack = createStackNavigator();
 const ChannelStack = createStackNavigator();
 const HomeStackScreen = () => (
-  <HomeStack.Navigator headerMode="none">
-    <HomeStack.Screen name="Home" component={Home} options={{ title: "Home",
-  
-  headerRight: () => (
-    <Logout />
-  ) }}/>
+  <HomeStack.Navigator 
+    screenOptions={{
+      headerShown: false
+    }}
+  >
+    <HomeStack.Screen name="Home" component={Home} />
     <ChannelStack.Screen name="Channel" component={Channel} />
     <ChannelAddStack.Screen name="ChannelAdd" component={ChannelAdd} />
     <ChannelEditStack.Screen name="ChannelEdit" component={ChannelEdit} />
@@ -52,22 +56,34 @@ const HomeStackScreen = () => (
 
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen = () => (
-  <ProfileStack.Navigator headerMode="none">
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}
+  >
     <ProfileStack.Screen name="Profile" component={Profile} />
   </ProfileStack.Navigator>
 );
 
 
 const TabsScreen = () => (
-  <Tabs.Navigator>
-    <Tabs.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }} />
-    <Tabs.Screen name="Profile" component={ProfileStackScreen} options={{ headerShown: false }} />
+  <Tabs.Navigator
+    screenOptions={{
+      headerShown: false
+    }}
+  >
+    <Tabs.Screen name="Home" component={HomeStackScreen} />
+    <Tabs.Screen name="Profile" component={ProfileStackScreen} />
   </Tabs.Navigator>
 );
 
 const RootStack = createStackNavigator();
 const RootStackScreen = ({ userToken }) => (
-  <RootStack.Navigator headerMode="none">
+  <RootStack.Navigator
+    screenOptions={
+      { headerShown: false }
+    }
+  >
     {userToken ? (
       <RootStack.Screen
         name="App"
@@ -77,9 +93,6 @@ const RootStackScreen = ({ userToken }) => (
       <RootStack.Screen
         name="Auth"
         component={AuthStackScreen}
-        options={{
-          animationEnabled: false
-        }}
       />
     )}
   </RootStack.Navigator>

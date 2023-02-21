@@ -99,15 +99,22 @@ const Channel = ({ route, navigation }) => {
           inverted={true}
           data={messages}
           renderItem={({ item }) => (
-            
-            <View style={[
-              styles.messageItem,
-              item.senderUser.id == currentUser.sub ? styles.sentMessage : styles.receivedMessage
-            ]}>
-              
-              <Text style={styles.textMessage}>
-                {item.message}
-              </Text>
+            <View>
+              <View style={[
+                styles.messageItem,
+                item.senderUser.id == currentUser.sub ? styles.sentMessage : styles.receivedMessage
+              ]}> 
+                <Text style={styles.textMessage}>
+                  {item.message}
+                </Text>
+              </View>
+              <View style={styles.textSender}>
+                {item.senderUser.id !== currentUser.sub &&
+                <Text style={styles.senderName}>
+                  {item.senderUser.nickname}
+                </Text>
+                }
+              </View>
             </View>
           )
         }
@@ -181,6 +188,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#6f6f6f',
     borderTopLeftRadius: 12,
     maxWidth: 80 + "%",
+  },
+  textSender: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  senderName: {
+    color: "#ffffff",
+    fontSize: 10,
+    marginLeft: 5,
   },
   sendItem: {
     flex: 1,

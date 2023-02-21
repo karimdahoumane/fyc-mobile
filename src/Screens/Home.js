@@ -26,9 +26,6 @@ const Home = ({ navigation }) => {
     },
   ];
 
-  useEffect(() => {
-    getChannels();
-  }, [navigation]);
 
   useEffect(() => {
     navigation.addListener('focus', () => {
@@ -71,7 +68,6 @@ const Home = ({ navigation }) => {
 
       const json = await response.json();
       setChannel(json);
-      console.log(json);
       navigation.navigate("Channel", {
         channelId: channel.id,
         channelName: channel.name,
@@ -118,15 +114,23 @@ const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             <View style={styles.channelItem}>
               <TouchableOpacity onPress={navigateToChannel(item, navigation)}>
-                <Text style={styles.channelTitleText}>{item.name}</Text>
+                <Text numberOfLines={1} style={styles.channelTitleText}>{item.name}</Text>
               </TouchableOpacity>
               <View style={styles.rightActionsContainer}>
-                <TouchableOpacity onPress={() => editChannel(item)}>
-                  <Text style={styles.rightActionButton}>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => deleteChannel(item)}>
-                  <Text style={styles.rightActionButton}>Delete</Text>
-                </TouchableOpacity>
+                <Icon
+                  style={styles.editButton}
+                  name="mode-edit"
+                  type="material"
+                  color="white"
+                  onPress={() => editChannel(item)}
+                />
+                <Icon
+                  style={styles.deleteButton}
+                  name="delete"
+                  type="material"
+                  color="white"
+                  onPress={() => deleteChannel(item)}
+                />
               </View>
             </View>
           )}
@@ -161,8 +165,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   channelsList: {
-    flex: 4,
-    width: "100%",
+    flex: 4   ,
   },
   channelItem: {
     flex: 1,
@@ -171,20 +174,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
+    borderBottomColor: "white",
   },
   channelTitleText: {
+    flex: 1,
     fontSize: 18,
     color: "white",
+    maxWidth: 225,  
   },
+
   rightActionsContainer: {
     flexDirection: "row",
   },
-  rightActionButton: {
-    color: "white",
-    backgroundColor: "red",
+  editButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
     padding: 10,
-    margin: 5,
+    backgroundColor: "orange",
+    borderRadius: 5,
+  },
+  deleteButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
+    padding: 10,
+    backgroundColor: "red",
     borderRadius: 5,
   },
   addChannelButton: {

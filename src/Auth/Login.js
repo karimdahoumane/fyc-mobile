@@ -11,7 +11,7 @@ import { AuthContext } from "./AuthContext";
 
 const Login = ({ navigation }) => {
   const { login } = React.useContext(AuthContext);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -25,9 +25,9 @@ const Login = ({ navigation }) => {
         <View style={styles.inputView}>
           <TextInput
             style={styles.textInput}
-            placeholder="Username"
+            placeholder="Email"
             placeholderTextColor="#003f5c"
-            onChangeText={(username) => setUsername(username)}
+            onChangeText={(email) => setEmail(email)}
           />
         </View>
         <View style={styles.inputView}>
@@ -41,15 +41,14 @@ const Login = ({ navigation }) => {
         {error && <Text style={styles.errorText}>{error}</Text>}
         <TouchableOpacity
           style={styles.loginBtn}
-          onPress={() => login(username, password, API_URL)}
+          onPress={() => login(email, password, API_URL)}
         >
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.registerBtn}
           onPress={() => navigation.navigate("Register")}
         >
-          <Text style={styles.registerText}>REGISTER</Text>
+          <Text style={styles.registerText}>Register on fyc-mobile app.</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-    fontSize: 20,
+    fontSize: 17,
   },
   loginBtn: {
     width: 90 + "%",
@@ -110,18 +109,10 @@ const styles = StyleSheet.create({
   loginText: {
     color: "white",
   },
-  registerBtn: {
-    width: 60 + "%",
-    backgroundColor: "#fb5b5a",
-    borderRadius: 10,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 10,
-  },
   registerText: {
     color: "white",
+    fontSize: 15,
+    marginTop: 10,
   },
   errorText: {
     color: "red",

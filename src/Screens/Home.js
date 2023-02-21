@@ -7,30 +7,22 @@ import { useEffect } from "react";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
 import { Icon } from "react-native-elements";
+import { getCurrentUser } from "../Auth/AuthProvider";
 
 const Home = ({ navigation }) => {
   const [channels, setChannels] = useState([]);
   const [channel, setChannel] = useState({});
-  const [channelToEdit, setChannelToEdit] = useState({});
   const [error, setError] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const buttons = [
-    {
-      text: <Icon name="edit" type="font-awesome" />,
-      style: { backgroundColor: "orange", color: "white" },
-    },
-    {
-      text: <Icon name="trash" type="font-awesome" />,
-      style: { backgroundColor: "red", color: "white" },
-    },
-  ];
-
+  const [nickname, setNickname] = useState();
 
   useEffect(() => {
     navigation.addListener('focus', () => {
       getChannels();
     });
+    async function fetchData() {
+      await getCurrentUserNickName();
+    }
+    fetchData();
   },[navigation, channels]);
 
   const getChannels = async () => {
@@ -78,6 +70,28 @@ const Home = ({ navigation }) => {
     }
   };
 
+  const getCurrentUserNickName = async () => {
+    
+    try {
+      const currentUser = await getCurrentUser();
+      const response = await fetch(API_URL + "users/" + currentUser.sub, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await getToken()),
+        },
+      });
+      if (!response.ok) {
+        setError(VIEW_ERROR);
+        return;
+      }
+      const json = await response.json();
+      setNickname(json.nickname);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const editChannel = (channel) => {
     navigation.navigate("ChannelEdit",{channel})
   };
@@ -105,7 +119,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.welcomeTitle}>
-        <Text style={styles.titleText}>Welcome to the chat app!</Text>
+        <Text style={styles.titleText}>Hello {nickname} !</Text>
       </View>
 
       <View style={styles.channelsList}>

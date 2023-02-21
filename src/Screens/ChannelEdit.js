@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, StyleSheet, Button } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Icon, Text } from "react-native-elements";
 
 const ChannelEdit = ({ route, navigation }) => {
   const { channel } = route.params;
-  const [text, setText] = useState("");
   const [channelName, setChannelName] = useState("");
   const [error, setError] = useState("");
 
@@ -13,7 +14,7 @@ const ChannelEdit = ({ route, navigation }) => {
     setChannelName(channel.name);
   }, []);
 
-  const postChannel = async () => {
+  const putChannel = async () => {
     try {
       const response = await fetch(API_URL + "channels/" + channel.id, {
         method: "PUT",
@@ -37,35 +38,70 @@ const ChannelEdit = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.sendItem}>
-      <TextInput
-        style={styles.messageInput}
-        placeholder="Nom du channel"
-        value={channelName}
-        onChangeText={setChannelName}
-      />
-      <Button
-        style={styles.messageButton}
-        title="Ajouter"
-        onPress={postChannel}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.titleItem}>
+        <Text style={styles.titleText}>Edit a channel</Text>
+      </View>
+      <View style={styles.editItem}>
+        <TextInput
+          style={styles.messageInput}
+          placeholder={channelName}
+          value={channelName}
+          onChangeText={setChannelName}
+        />
+        <Icon
+          style={styles.messageButton}
+          name="edit"
+          type="material"
+          color="#ffffff"
+          onPress={putChannel}
+        />
+      </View>
       {error && <Text style={styles.errorMessage}>{error}</Text>}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
   },
-  input: {
+  titleItem: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },  
+  editItem: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  messageInput: {
     height: 40,
-    width: "90%",
-    borderColor: "gray",
+    borderColor: "#111111",
+    backgroundColor: "#c2e0f4",
     borderWidth: 1,
+    paddingHorizontal: 10,
+    marginRight: 10,
+    borderRadius: 5,
+  },
+  messageButton: {
+    backgroundColor: "#0084ff",
     padding: 10,
+    borderRadius: 5,
+  },
+  errorMessage: {
+    color: 'red',
+    marginTop: 5,
   },
 });
 

@@ -5,110 +5,118 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  StatusBar,
 } from "react-native";
 import { API_URL } from "../Utils/Constants";
 import { AuthContext } from "./AuthContext";
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const { login } = React.useContext(AuthContext);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
       <View style={styles.welcomeView}>
-        <Text style={styles.welcomeText}>Welcome to the Login Page</Text>
+        <Text style={styles.welcomeText}>fyc-mobile app</Text>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Username"
-          placeholderTextColor="#003f5c"
-          onChangeText={(username) => setUsername(username)}
-        />
+      <View style={styles.formView}>
+        <Text style={styles.titleForm}>Login</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Email"
+            placeholderTextColor="#003f5c"
+            onChangeText={(email) => setEmail(email)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+          />
+        </View>
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() => login(email, password, API_URL)}
+        >
+          <Text style={styles.loginText}>LOGIN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={styles.registerText}>Register on fyc-mobile app.</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
-      <TouchableOpacity style={styles.loginBtn} onPress={() => login(username, password, API_URL)}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.registerText}>REGISTER</Text>
-      </TouchableOpacity>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
   },
   welcomeView: {
-    backgroundColor: "#FFC0CB",
-    borderRadius: 30,
-    width: "60%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
   },
   welcomeText: {
-    color: "#fff",
+    fontSize: 30,
     fontWeight: "bold",
+    color: "#ffffff",
+  },
+  formView: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  titleForm: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginBottom: 40,
   },
   inputView: {
-    backgroundColor: "#FFC0CB",
-    borderRadius: 30,
-    width: "60%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
+    backgroundColor: "#c2e0f4",
+    borderRadius: 15,
+    height: 50,
+    marginBottom: 10,
+    justifyContent: "center",
+    padding: 20,
   },
-  TextInput: {
+  textInput: {
     height: 50,
     flex: 1,
     padding: 10,
-    marginLeft: 20,
+    fontSize: 17,
   },
   loginBtn: {
-    width: "80%",
-    borderRadius: 25,
+    width: 90 + "%",
+    backgroundColor: "#0084ff",
+    borderRadius: 10,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
+    marginTop: 20,
+    marginBottom: 10,
   },
   loginText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  registerBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
+    color: "white",
   },
   registerText: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: "white",
+    fontSize: 15,
+    marginTop: 10,
   },
   errorText: {
     color: "red",
+    marginBottom: 10,
   },
 });
 

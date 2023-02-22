@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, Button } from "react-native";
-import { ScreenContainer } from "react-native-screens";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { View } from "react-native";
 import { useState } from "react";
@@ -8,33 +7,22 @@ import { useEffect } from "react";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
 import { Icon } from "react-native-elements";
+import { getCurrentUser } from "../Auth/AuthProvider";
 
 const Home = ({ navigation }) => {
   const [channels, setChannels] = useState([]);
   const [channel, setChannel] = useState({});
-  const [channelToEdit, setChannelToEdit] = useState({});
   const [error, setError] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const buttons = [
-    {
-      text: <Icon name="edit" type="font-awesome" />,
-      style: { backgroundColor: "orange", color: "white" },
-    },
-    {
-      text: <Icon name="trash" type="font-awesome" />,
-      style: { backgroundColor: "red", color: "white" },
-    },
-  ];
-
-  useEffect(() => {
-    getChannels();
-  }, [navigation]);
+  const [nickname, setNickname] = useState();
 
   useEffect(() => {
     navigation.addListener('focus', () => {
       getChannels();
     });
+    async function fetchData() {
+      await getCurrentUserNickName();
+    }
+    fetchData();
   },[navigation, channels]);
 
   const getChannels = async () => {
@@ -72,7 +60,6 @@ const Home = ({ navigation }) => {
 
       const json = await response.json();
       setChannel(json);
-      console.log(json);
       navigation.navigate("Channel", {
         channelId: channel.id,
         channelName: channel.name,
@@ -80,6 +67,28 @@ const Home = ({ navigation }) => {
     } catch (error) {
       console.error(error);
       setError(error);
+    }
+  };
+
+  const getCurrentUserNickName = async () => {
+    
+    try {
+      const currentUser = await getCurrentUser();
+      const response = await fetch(API_URL + "users/" + currentUser.sub, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await getToken()),
+        },
+      });
+      if (!response.ok) {
+        setError(VIEW_ERROR);
+        return;
+      }
+      const json = await response.json();
+      setNickname(json.nickname);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -110,7 +119,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.welcomeTitle}>
-        <Text style={styles.titleText}>Welcome to the chat app!</Text>
+        <Text style={styles.titleText}>Hello {nickname} !</Text>
       </View>
 
       <View style={styles.channelsList}>
@@ -119,28 +128,37 @@ const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             <View style={styles.channelItem}>
               <TouchableOpacity onPress={navigateToChannel(item, navigation)}>
-                <Text>{item.name}</Text>
+                <Text numberOfLines={1} style={styles.channelTitleText}>{item.name}</Text>
               </TouchableOpacity>
               <View style={styles.rightActionsContainer}>
-                <TouchableOpacity onPress={() => editChannel(item)}>
-                  <Text style={styles.rightActionButton}>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => deleteChannel(item)}>
-                  <Text style={styles.rightActionButton}>Delete</Text>
-                </TouchableOpacity>
+                <Icon
+                  style={styles.editButton}
+                  name="mode-edit"
+                  type="material"
+                  color="white"
+                  onPress={() => editChannel(item)}
+                />
+                <Icon
+                  style={styles.deleteButton}
+                  name="delete"
+                  type="material"
+                  color="white"
+                  onPress={() => deleteChannel(item)}
+                />
               </View>
             </View>
           )}
           keyExtractor={(item) => item.id}
         />
       </View>
-      <View style={styles.addChannelButton}>
-        <Button
-          style={styles.messageButton}
-          title="Ajouter un channel"
-          onPress={() => navigation.navigate("ChannelAdd")}
-        />
-      </View>
+      <Icon
+        style={styles.addChannelButton}
+        name="circle-with-plus"
+        type="entypo"
+        color="#0084ff"
+        size={50}
+        onPress={() => navigation.navigate("ChannelAdd")}
+      />
     </View>
   );
 };
@@ -148,9 +166,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#000000",
   },
   welcomeTitle: {
     flex: 1,
@@ -160,10 +176,10 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "white",
   },
   channelsList: {
-    flex: 4,
-    width: "100%",
+    flex: 4   ,
   },
   channelItem: {
     flex: 1,
@@ -172,17 +188,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
+    borderBottomColor: "white",
   },
+  channelTitleText: {
+    flex: 1,
+    fontSize: 18,
+    color: "white",
+    maxWidth: 225,  
+  },
+
   rightActionsContainer: {
     flexDirection: "row",
   },
-  rightActionButton: {
-    color: "white",
-    backgroundColor: "red",
+  editButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
     padding: 10,
-    margin: 5,
+    backgroundColor: "orange",
     borderRadius: 5,
+  },
+  deleteButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
+    padding: 10,
+    backgroundColor: "red",
+    borderRadius: 5,
+  },
+  addChannelButton: {
+    flex: 1,
+    alignSelf: "flex-end",
+    margin: 10,
   },
 });
 

@@ -16,14 +16,14 @@ const Home = ({ navigation }) => {
   const [nickname, setNickname] = useState();
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
+    navigation.addListener("focus", () => {
       getChannels();
     });
     async function fetchData() {
       await getCurrentUserNickName();
     }
     fetchData();
-  },[navigation, channels]);
+  }, [navigation, channels]);
 
   const getChannels = async () => {
     try {
@@ -71,7 +71,6 @@ const Home = ({ navigation }) => {
   };
 
   const getCurrentUserNickName = async () => {
-    
     try {
       const currentUser = await getCurrentUser();
       const response = await fetch(API_URL + "users/" + currentUser.sub, {
@@ -93,7 +92,7 @@ const Home = ({ navigation }) => {
   };
 
   const editChannel = (channel) => {
-    navigation.navigate("ChannelEdit",{channel})
+    navigation.navigate("ChannelEdit", { channel });
   };
 
   const deleteChannel = async (channel) => {
@@ -128,7 +127,9 @@ const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             <View style={styles.channelItem}>
               <TouchableOpacity onPress={navigateToChannel(item, navigation)}>
-                <Text numberOfLines={1} style={styles.channelTitleText}>{item.name}</Text>
+                <Text numberOfLines={1} style={styles.channelTitleText}>
+                  {item.name}
+                </Text>
               </TouchableOpacity>
               <View style={styles.rightActionsContainer}>
                 <Icon
@@ -174,12 +175,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleText: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
     color: "white",
   },
   channelsList: {
-    flex: 4   ,
+    flex: 4,
   },
   channelItem: {
     flex: 1,
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     color: "white",
-    maxWidth: 225,  
+    maxWidth: 225,
   },
 
   rightActionsContainer: {
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     margin: 10,
     padding: 10,
-    backgroundColor: "orange",
+    backgroundColor: "gray",
     borderRadius: 5,
   },
   deleteButton: {

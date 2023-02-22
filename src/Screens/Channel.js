@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import { API_URL, VIEW_ERROR } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
@@ -81,17 +81,14 @@ const Channel = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.channelTitle}>
-          <Icon
-            style={styles.goBackButton}
-            name="arrow-back"
-            type="material"
-            color="#ffffff"
-            onPress={() => navigation.goBack()}
-          />
-          <Text style={styles.channelName}>
-            {channelName}
-          </Text>
-        
+        <Icon
+          style={styles.goBackButton}
+          name="arrow-back"
+          type="material"
+          color="#ffffff"
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.channelName}>{channelName}</Text>
       </View>
       <View style={styles.messageItem}>
         <FlatList
@@ -100,24 +97,25 @@ const Channel = ({ route, navigation }) => {
           data={messages}
           renderItem={({ item }) => (
             <View>
-              <View style={[
-                styles.messageItem,
-                item.senderUser.id == currentUser.sub ? styles.sentMessage : styles.receivedMessage
-              ]}> 
-                <Text style={styles.textMessage}>
-                  {item.message}
-                </Text>
+              <View
+                style={[
+                  styles.messageItem,
+                  item.senderUser.id == currentUser.sub
+                    ? styles.sentMessage
+                    : styles.receivedMessage,
+                ]}
+              >
+                <Text style={styles.textMessage}>{item.message}</Text>
               </View>
               <View style={styles.textSender}>
-                {item.senderUser.id !== currentUser.sub &&
-                <Text style={styles.senderName}>
-                  {item.senderUser.nickname}
-                </Text>
-                }
+                {item.senderUser.id !== currentUser.sub && (
+                  <Text style={styles.senderName}>
+                    {item.senderUser.nickname}
+                  </Text>
+                )}
               </View>
             </View>
-          )
-        }
+          )}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -157,11 +155,15 @@ const styles = StyleSheet.create({
   },
   goBackButton: {
     flex: 1,
-    margin : 10,
+    margin: 10,
+    justifyContent: "flex-start",
   },
   channelName: {
+    flex: 8,
     color: "#ffffff",
     fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   messageItem: {
     flex: 8,
@@ -178,14 +180,14 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   sentMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#0084ff',
+    alignSelf: "flex-end",
+    backgroundColor: "#0084ff",
     borderBottomRightRadius: 12,
     maxWidth: 80 + "%",
   },
   receivedMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#6f6f6f',
+    alignSelf: "flex-start",
+    backgroundColor: "#6f6f6f",
     borderTopLeftRadius: 12,
     maxWidth: 80 + "%",
   },
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
+    marginBottom: 15,
   },
   senderName: {
     color: "#ffffff",

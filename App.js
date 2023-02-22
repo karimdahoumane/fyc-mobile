@@ -91,6 +91,7 @@ const TabsScreen = () => (
       headerBackgroundContainerStyle: {
         backgroundColor: "#000000",
       },
+      headerTintColor: "#000",
       headerRight : () => (
         <Logout />
       ),

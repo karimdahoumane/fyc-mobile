@@ -14,6 +14,8 @@ import Splash from "./src/Screens/Splash";
 import ChannelAdd from "./src/Screens/ChannelAdd";
 import ChannelEdit from "./src/Screens/ChannelEdit";
 import { removeToken, storeToken } from "./src/Auth/TokenProvider";
+import { Icon } from "react-native-elements";
+import { View } from "react-native";
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -44,7 +46,7 @@ const ChannelStack = createStackNavigator();
 const HomeStackScreen = () => (
   <HomeStack.Navigator 
     screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}
   >
     <HomeStack.Screen name="Home" component={Home} />
@@ -68,9 +70,31 @@ const ProfileStackScreen = () => (
 
 const TabsScreen = () => (
   <Tabs.Navigator
-    screenOptions={{
-      headerShown: false
-    }}
+    screenOptions={({ route}) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
+        if (route.name === "Home") {
+          iconName = "home";
+        } else if (route.name === "Profile") {
+          iconName = "person";
+        }
+        return <Icon name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: "#0084ff",
+      tabBarInactiveTintColor: "gray",
+      tabBarStyle: {
+        backgroundColor: "#000",
+      },
+      headerBackground: () => (
+        <View style={{ backgroundColor: "#000000" }} />
+      ),
+      headerBackgroundContainerStyle: {
+        backgroundColor: "#000000",
+      },
+      headerRight : () => (
+        <Logout />
+      ),
+    })}
   >
     <Tabs.Screen name="Home" component={HomeStackScreen} />
     <Tabs.Screen name="Profile" component={ProfileStackScreen} />

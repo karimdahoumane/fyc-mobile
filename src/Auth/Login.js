@@ -10,10 +10,9 @@ import { API_URL } from "../Utils/Constants";
 import { AuthContext } from "./AuthContext";
 
 const Login = ({ navigation }) => {
-  const { login } = React.useContext(AuthContext);
+  const { login, error } = React.useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   return (
     <View style={styles.container}>

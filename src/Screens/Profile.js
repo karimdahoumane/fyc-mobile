@@ -7,18 +7,15 @@ import { API_URL } from "../Utils/Constants";
 import { getToken } from "../Auth/TokenProvider";
 import { getCurrentUser } from "../Auth/AuthProvider";
 
-
-
 const Profile = () => {
   const [email, setEmail] = React.useState("");
   const [nickname, setNickname] = React.useState("");
   const [error, setError] = React.useState("");
 
   useEffect(() => {
-    
     const fetchData = async () => {
       try {
-        const user = await getCurrentUser()
+        const user = await getCurrentUser();
         const response = await fetch(API_URL + "users/" + user.sub, {
           method: "GET",
           headers: {
@@ -39,22 +36,24 @@ const Profile = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleItem}>
-        <Text style={styles.titleText}>Mon profil</Text>
+        <Text style={styles.titleText}>My profile</Text>
       </View>
       <View style={styles.editItem}>
-      <Text style={styles.labelItem}>Email</Text>
-      <TextInput style={styles.textInput}
-        onChangeText={setEmail}
-        value={email}
-        disabled
-      />
-      <Text style={styles.labelItem}>Pseudo</Text>
-      <TextInput style={styles.textInput}
-        onChangeText={setNickname}
-        value={nickname}
-        disabled
-      />
-      <Text style={{ color: "red" }}>{error}</Text>
+        <Text style={styles.labelItem}>Email</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={setEmail}
+          value={email}
+          disabled
+        />
+        <Text style={styles.labelItem}>Nickname</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={setNickname}
+          value={nickname}
+          disabled
+        />
+        <Text style={{ color: "red" }}>{error}</Text>
       </View>
     </SafeAreaView>
   );
@@ -96,8 +95,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
   },
-
-  
 });
 
 export default Profile;

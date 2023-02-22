@@ -1,4 +1,3 @@
-
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -21,7 +20,7 @@ const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator
     screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}
   >
     <AuthStack.Screen
@@ -44,7 +43,7 @@ const ChannelAddStack = createStackNavigator();
 const ChannelEditStack = createStackNavigator();
 const ChannelStack = createStackNavigator();
 const HomeStackScreen = () => (
-  <HomeStack.Navigator 
+  <HomeStack.Navigator
     screenOptions={{
       headerShown: false,
     }}
@@ -60,17 +59,16 @@ const ProfileStack = createStackNavigator();
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator
     screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}
   >
     <ProfileStack.Screen name="Profile" component={Profile} />
   </ProfileStack.Navigator>
 );
 
-
 const TabsScreen = () => (
   <Tabs.Navigator
-    screenOptions={({ route}) => ({
+    screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName;
         if (route.name === "Home") {
@@ -85,16 +83,12 @@ const TabsScreen = () => (
       tabBarStyle: {
         backgroundColor: "#000",
       },
-      headerBackground: () => (
-        <View style={{ backgroundColor: "#000000" }} />
-      ),
+      headerBackground: () => <View style={{ backgroundColor: "#000000" }} />,
       headerBackgroundContainerStyle: {
         backgroundColor: "#000000",
       },
       headerTintColor: "#000",
-      headerRight : () => (
-        <Logout />
-      ),
+      headerRight: () => <Logout />,
     })}
   >
     <Tabs.Screen name="Home" component={HomeStackScreen} />
@@ -104,21 +98,11 @@ const TabsScreen = () => (
 
 const RootStack = createStackNavigator();
 const RootStackScreen = ({ userToken }) => (
-  <RootStack.Navigator
-    screenOptions={
-      { headerShown: false }
-    }
-  >
+  <RootStack.Navigator screenOptions={{ headerShown: false }}>
     {userToken ? (
-      <RootStack.Screen
-        name="App"
-        component={TabsScreen}
-      />    
+      <RootStack.Screen name="App" component={TabsScreen} />
     ) : (
-      <RootStack.Screen
-        name="Auth"
-        component={AuthStackScreen}
-      />
+      <RootStack.Screen name="Auth" component={AuthStackScreen} />
     )}
   </RootStack.Navigator>
 );
@@ -143,12 +127,12 @@ const App = () => {
             }),
           });
           if (!response.ok) {
-            setError("Invalid username or password");
+            setError("Invalid email or password");
             return;
           } else {
             const json = await response.json();
             if (json.access_token) {
-              await storeToken(json.access_token)
+              await storeToken(json.access_token);
               setUserToken(json.access_token);
               setIsLoading(false);
             }
@@ -162,8 +146,9 @@ const App = () => {
         setUserToken(null);
         removeToken();
       },
+      error: error,
     }),
-    []
+    [error]
   );
 
   React.useEffect(() => {
@@ -182,7 +167,6 @@ const App = () => {
         <RootStackScreen userToken={userToken} />
       </NavigationContainer>
     </AuthContext.Provider>
-
   );
 };
 
